@@ -1,10 +1,12 @@
 import 'dotenv/config'
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3'
+import { PrismaLibSql } from '@prisma/adapter-libsql'
 import { PrismaClient } from '../src/generated/prisma/client'
 import bcrypt from 'bcryptjs'
 
-const connectionString = process.env.DATABASE_URL ?? 'file:./prisma/dev.db'
-const adapter = new PrismaBetterSqlite3({ url: connectionString })
+const url = process.env.DATABASE_URL ?? 'file:./prisma/dev.db'
+const config: { url: string; authToken?: string } = { url }
+if (process.env.TURSO_AUTH_TOKEN) config.authToken = process.env.TURSO_AUTH_TOKEN
+const adapter = new PrismaLibSql(config)
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
