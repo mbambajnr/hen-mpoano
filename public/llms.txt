@@ -1,0 +1,29 @@
+# Hɛn Mpoano — AI context file
+# Our Coast, Our Future
+
+## About
+Hɛn Mpoano is a Ghanaian non-governmental organization (NGO) established in 2013 to provide technical, policy and extension support to coastal communities, government institutions, and the private sector for inclusive and integrated management of Ghana's coastal and marine ecosystems.
+
+## Key Information
+- Location: 38 J. Cross Cole Street, Windy Ridge Extension, Takoradi, Ghana
+- Contact: info@henmpoano.org | +233 24 471 8165
+- Founded: 2013
+- Focus Areas: Sustainable Livelihoods, Coastal Landscapes, Gender & Inclusion, Fisheries Governance
+
+## Key Pages
+- Homepage: https://henmpoano.org/
+- About: https://henmpoano.org/about
+- Expertise: https://henmpoano.org/expertise
+- Projects: https://henmpoano.org/projects
+- Publications: https://henmpoano.org/publications
+- News: https://henmpoano.org/news
+- Jobs: https://henmpoano.org/jobs
+- Contact: https://henmpoano.org/contact
+- Volunteer: https://henmpoano.org/volunteer
+
+## Notable Achievements
+- Led USAID-funded Integrated Coastal and Fisheries Governance (ICFG) Initiative
+- Supported Ghana's first Marine Protected Area (MPA) declaration
+- Developed novel clam depuration technology — first in West Africa
+- Planted 200K+ mangrove seedlings
+- Reached 150+ coastal communities

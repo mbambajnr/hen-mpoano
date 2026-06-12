@@ -1,0 +1,133 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  createdAt DateTime @default(now())
+}
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  excerpt     String
+  content     String
+  category    String   @default("News")
+  image       String?
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isPublished Boolean  @default(true)
+}
+
+model Publication {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String
+  fileUrl     String?
+  category    String
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isPublished Boolean  @default(true)
+}
+
+model JobPosting {
+  id           String    @id @default(cuid())
+  title        String
+  slug         String    @unique
+  department   String
+  location     String    @default("Takoradi, Ghana")
+  type         String    @default("Full-time")
+  description  String
+  requirements String?
+  howToApply   String?
+  deadline     DateTime?
+  publishedAt  DateTime  @default(now())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  isActive     Boolean   @default(true)
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Volunteer {
+  id           String   @id @default(cuid())
+  name         String
+  email        String
+  phone        String?
+  skills       String
+  availability String
+  message      String?
+  createdAt    DateTime @default(now())
+  read         Boolean  @default(false)
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String
+  eventDate   DateTime
+  location    String
+  category    String
+  image       String?
+  link        String?
+  isPast      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model FAQ {
+  id       String @id @default(cuid())
+  question String
+  answer   String
+  category String
+  order    Int    @default(0)
+}
+
+model Partner {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  logoUrl     String?
+  websiteUrl  String?
+  order       Int     @default(0)
+  isActive    Boolean @default(true)
+}
+
+model Testimonial {
+  id         String @id @default(cuid())
+  quote      String
+  authorName String
+  authorRole String?
+  location   String?
+  isActive   Boolean @default(true)
+}
+
+model GalleryItem {
+  id          String  @id @default(cuid())
+  imageUrl    String
+  caption     String
+  altText     String
+  category    String
+  order       Int     @default(0)
+  isPublished Boolean @default(true)
+}
