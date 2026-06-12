@@ -2,17 +2,35 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 export default function Header() {
   const pathname = usePathname()
   const [navOpen, setNavOpen] = useState(false)
   const [mediaOpen, setMediaOpen] = useState(false)
+  const [resourcesOpen, setResourcesOpen] = useState(false)
+
+  const mediaRef = useRef<HTMLDivElement>(null)
+  const resourcesRef = useRef<HTMLDivElement>(null)
 
   const isActive = (path: string) => {
     if (path === '/') return pathname === '/' ? 'active' : ''
     return pathname.startsWith(path) ? 'active' : ''
   }
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (mediaRef.current && !mediaRef.current.contains(e.target as Node)) {
+        setMediaOpen(false)
+      }
+      if (resourcesRef.current && !resourcesRef.current.contains(e.target as Node)) {
+        setResourcesOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   return (
     <header className="site-header">
@@ -31,7 +49,9 @@ export default function Header() {
         <nav className={`main-nav${navOpen ? ' open' : ''}`} id="mainNav">
           <Link href="/" className={isActive('/')} onClick={() => setNavOpen(false)}>Home</Link>
           <Link href="/about" className={isActive('/about')} onClick={() => setNavOpen(false)}>About</Link>
-          <div className="nav-dropdown"
+
+          {/* Media dropdown */}
+          <div className="nav-dropdown" ref={mediaRef}
             onMouseEnter={() => setMediaOpen(true)}
             onMouseLeave={() => setMediaOpen(false)}>
             <a onClick={(e) => { e.preventDefault(); setMediaOpen(!mediaOpen) }}
@@ -45,9 +65,27 @@ export default function Header() {
               </div>
             )}
           </div>
+
           <Link href="/expertise" className={isActive('/expertise')} onClick={() => setNavOpen(false)}>Expertise</Link>
           <Link href="/projects" className={isActive('/projects')} onClick={() => setNavOpen(false)}>Projects</Link>
-          <Link href="/publications" className={isActive('/publications')} onClick={() => setNavOpen(false)}>Publications</Link>
+
+          {/* Resources dropdown */}
+          <div className="nav-dropdown" ref={resourcesRef}
+            onMouseEnter={() => setResourcesOpen(true)}
+            onMouseLeave={() => setResourcesOpen(false)}>
+            <a onClick={(e) => { e.preventDefault(); setResourcesOpen(!resourcesOpen) }}
+               className={isActive('/resources') || isActive('/publications') ? 'active' : ''}>
+              Resources ▾
+            </a>
+            {resourcesOpen && (
+              <div className="nav-dropdown-menu" style={{ display: 'block' }}>
+                <Link href="/resources" onClick={() => setNavOpen(false)}>Guides &amp; Explainers</Link>
+                <Link href="/publications" onClick={() => setNavOpen(false)}>Publications</Link>
+                <Link href="/faq" onClick={() => setNavOpen(false)}>FAQ</Link>
+              </div>
+            )}
+          </div>
+
           <Link href="/news" className={isActive('/news')} onClick={() => setNavOpen(false)}>News</Link>
           <Link href="/team" className={isActive('/team')} onClick={() => setNavOpen(false)}>Team</Link>
           <Link href="/contact" className={isActive('/contact')} onClick={() => setNavOpen(false)}>Contact</Link>
