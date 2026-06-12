@@ -40,8 +40,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# database (committed for Netlify deployment)
+# database
+*.db
 *.db-journal
+prisma/dev.db
 
 # prisma generated client (regenerate with `npx prisma generate`)
 src/generated/
