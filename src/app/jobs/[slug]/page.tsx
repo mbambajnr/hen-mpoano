@@ -7,17 +7,27 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { prisma } = await import('@/lib/prisma')
-  const { slug } = await params
-  const job = await prisma.jobPosting.findUnique({ where: { slug } })
-  if (!job) return { title: 'Not Found' }
-  return { title: `${job.title} — Jobs`, description: job.description }
+  try {
+    const { prisma } = await import('@/lib/prisma')
+    const { slug } = await params
+    const job = await prisma.jobPosting.findUnique({ where: { slug } })
+    if (!job) return { title: 'Not Found' }
+    return { title: `${job.title} — Jobs`, description: job.description }
+  } catch {
+    return { title: 'Job Details' }
+  }
 }
 
 export default async function JobDetailPage({ params }: Props) {
-  const { prisma } = await import('@/lib/prisma')
-  const { slug } = await params
-  const job = await prisma.jobPosting.findUnique({ where: { slug } })
+  let job
+  try {
+    const { prisma } = await import('@/lib/prisma')
+    const { slug } = await params
+    job = await prisma.jobPosting.findUnique({ where: { slug } })
+  } catch {
+    job = null
+  }
+
   if (!job || !job.isActive) notFound()
 
   const isExpired = job.deadline && new Date(job.deadline) < new Date()
@@ -32,7 +42,7 @@ export default async function JobDetailPage({ params }: Props) {
           <p>{job.type} · {job.location}</p>
           {job.deadline && (
             <p style={{ opacity: 0.8, fontSize: '0.9rem', marginTop: 'var(--spacing-sm)' }}>
-              {isExpired ? '⛔ Applications closed' : `📅 Apply by ${new Date(job.deadline).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`}
+              {isExpired ? '⤑ Applications closed' : `📅 Apply by ${new Date(job.deadline).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`}
             </p>
           )}
         </div>
