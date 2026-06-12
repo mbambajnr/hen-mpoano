@@ -1,5 +1,7 @@
 import type { MetadataRoute } from 'next'
 
+export const dynamic = 'force-dynamic'
+
 const staticPages = [
   { url: '', priority: 1.0 },
   { url: '/about', priority: 0.8 },
@@ -16,38 +18,46 @@ const staticPages = [
 ]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const { prisma } = await import('@/lib/prisma')
+  const entries: MetadataRoute.Sitemap = staticPages.map(p => ({
+    url: `https://henmpoano.org${p.url}`,
+    lastModified: new Date(),
+    changeFrequency: p.url === '' ? 'weekly' as const : 'monthly' as const,
+    priority: p.priority,
+  }))
 
-  const posts = await prisma.blogPost.findMany({ where: { isPublished: true }, select: { slug: true, updatedAt: true } })
-  const publications = await prisma.publication.findMany({ where: { isPublished: true }, select: { slug: true, updatedAt: true } })
-  const jobs = await prisma.jobPosting.findMany({ where: { isActive: true }, select: { slug: true, updatedAt: true } })
+  try {
+    const { prisma } = await import('@/lib/prisma')
 
-  const entries: MetadataRoute.Sitemap = [
-    ...staticPages.map(p => ({
-      url: `https://henmpoano.org${p.url}`,
-      lastModified: new Date(),
-      changeFrequency: p.url === '' ? 'weekly' as const : 'monthly' as const,
-      priority: p.priority,
-    })),
-    ...posts.map(p => ({
-      url: `https://henmpoano.org/news/${p.slug}`,
-      lastModified: p.updatedAt,
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    })),
-    ...publications.map(p => ({
-      url: `https://henmpoano.org/publications/${p.slug}`,
-      lastModified: p.updatedAt,
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    })),
-    ...jobs.map(p => ({
-      url: `https://henmpoano.org/jobs/${p.slug}`,
-      lastModified: p.updatedAt,
-      changeFrequency: 'weekly' as const,
-      priority: 0.5,
-    })),
-  ]
+    const [posts, publications, jobs] = await Promise.all([
+      prisma.blogPost.findMany({ where: { isPublished: true }, select: { slug: true, updatedAt: true } }),
+      prisma.publication.findMany({ where: { isPublished: true }, select: { slug: true, updatedAt: true } }),
+      prisma.jobPosting.findMany({ where: { isActive: true }, select: { slug: true, updatedAt: true } }),
+    ])
+
+    entries.push(
+      ...posts.map(p => ({
+        url: `https://henmpoano.org/news/${p.slug}`,
+        lastModified: p.updatedAt,
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+      })),
+      ...publications.map(p => ({
+        url: `https://henmpoano.org/publications/${p.slug}`,
+        lastModified: p.updatedAt,
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+      })),
+      ...jobs.map(p => ({
+        url: `https://henmpoano.org/jobs/${p.slug}`,
+        lastModified: p.updatedAt,
+        changeFrequency: 'weekly' as const,
+        priority: 0.5,
+      })),
+    )
+  } catch {
+    // DB not available during build (e.g., Netlify CI without Turso)
+    // return sitemap with static pages only
+  }
 
   return entries
 }
