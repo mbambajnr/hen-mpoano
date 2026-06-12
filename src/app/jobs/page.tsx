@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   description: 'View current job openings and career opportunities at Hɛn Mpoano.',
 }
 
+export const dynamic = 'force-dynamic'
+
 async function getJobs() {
   const { prisma } = await import('@/lib/prisma')
   return prisma.jobPosting.findMany({
