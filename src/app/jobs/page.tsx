@@ -9,11 +9,16 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic'
 
 async function getJobs() {
-  const { prisma } = await import('@/lib/prisma')
-  return prisma.jobPosting.findMany({
-    where: { isActive: true },
-    orderBy: { publishedAt: 'desc' },
-  })
+  try {
+    const { prisma } = await import('@/lib/prisma')
+    return await prisma.jobPosting.findMany({
+      where: { isActive: true },
+      orderBy: { publishedAt: 'desc' },
+    })
+  } catch (e) {
+    console.error('Failed to fetch jobs:', e)
+    return []
+  }
 }
 
 export default async function JobsPage() {
