@@ -1,4 +1,5 @@
-import { Target, Eye } from 'lucide-react'
+import { Target, Eye, Sprout, Fish } from 'lucide-react'
+import Link from 'next/link'
 
 export default function HeroIntro() {
   return (
@@ -13,7 +14,10 @@ export default function HeroIntro() {
             <p style={{ color: "var(--color-gray-600)", lineHeight: 1.8, fontSize: "1.05rem", marginBottom: "var(--spacing-xl)" }}>
               Hɛn Mpoano is a Ghanaian non-governmental organization (NGO) established to provide technical, policy and extension support to coastal communities, emerging civil society groups, traditional authorities, government institutions and the private sector to ensure inclusive and integrated management of Ghana&apos;s coastal and marine ecosystems.
             </p>
-            <a href="/expertise" className="btn btn-sand">See More Of What We Do →</a>
+            <div style={{ display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
+              <Link href="/expertise" className="btn btn-sand">Explore Our Expertise →</Link>
+              <Link href="/resources" className="btn btn-teal">Browse Resources →</Link>
+            </div>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-lg)" }}>
@@ -23,7 +27,7 @@ export default function HeroIntro() {
               <p style={{ color: "var(--color-gray-600)", fontSize: "0.9rem", lineHeight: 1.7, marginBottom: "var(--spacing-md)" }}>
                 Provide technical, policy and extension support to actors in government, private sector and civil society through capacity building, research, networking...
               </p>
-              <a href="/about" className="pillar-link">Read More →</a>
+              <Link href="/about" className="pillar-link">Read More →</Link>
             </div>
 
             <div className="pillar-card" style={{ margin: 0 }}>
@@ -32,7 +36,7 @@ export default function HeroIntro() {
               <p style={{ color: "var(--color-gray-600)", fontSize: "0.9rem", lineHeight: 1.7, marginBottom: "var(--spacing-md)" }}>
                 We envision a world where inclusive and integrated management of coastal and marine ecosystems generate long-term benefits to nature and people.
               </p>
-              <a href="/about" className="pillar-link">Read More →</a>
+              <Link href="/about" className="pillar-link">Read More →</Link>
             </div>
           </div>
         </div>
